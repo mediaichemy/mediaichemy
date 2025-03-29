@@ -27,7 +27,7 @@ class ShortVideoCreator(ContentCreator):
             text_details=self.configs['text_details'],
             img_tags=self.configs['img_tags'],
             languages=self.configs['languages']
-        )
+        ).generate_prompt()
         super().__init__(content_type="short_video")
 
     async def generate_ideas(self):
@@ -67,10 +67,10 @@ class ShortVideoCreator(ContentCreator):
                                       prompt=text,
                                       output_path=content.dir + '/speech.mp3')
             duration = speech.get_duration()
-            extender = VideoEdit(video)
-            extender.extend_to_duration(target_duration=duration,
-                                        prompt=content.image_prompt,
-                                        method=self.configs['extend_method'])
+            video_editor = VideoEdit(video)
+            video_editor.extend_to_duration(target_duration=duration,
+                                            prompt=content.image_prompt,
+                                            method=self.configs['extend_method'])
 
         print(video)
         print(duration)

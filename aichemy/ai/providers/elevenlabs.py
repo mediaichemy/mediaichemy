@@ -1,7 +1,7 @@
 import logging
 from aichemy.ai.provider import Provider
 import os
-from aichemy.ai.providers.elevenlabs import ElevenLabs, VoiceSettings
+from elevenlabs import ElevenLabs, VoiceSettings
 from aichemy.tools.filehandling import MP3File
 from aichemy.configs import ConfigManager
 

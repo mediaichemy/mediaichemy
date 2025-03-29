@@ -19,7 +19,7 @@ class ShortVideoPrompt:
     """
     n_ideas: int
     text_details: str
-    img_tags: List[str]
+    img_tags: str
     languages: List[str]
 
     def __post_init__(self):
@@ -42,14 +42,14 @@ class ShortVideoPrompt:
             f"Text details: {self.text_details}\n\n"
             f"For each text write a prompt for creating an image that "
             f"follows it. Image prompt should be in the following format: "
-            f"tag1, tag2, tag3, etc. First tags are: {', '.join(self.img_tags)}\n\n"
+            f"tag1, tag2, tag3, etc. First tags are: {self.img_tags}\n\n"
             f"For each text and image write a caption that follows it.\n"
             f"Don't include hashtags.\n\n"
             f"Make a version of the text and caption to each of the "
-            f"following languages:\n {', '.join(self.languages_names)}\n\n"
+            f"following languages:\n {', '.join(self.languages.get_names())}\n\n"
             f"The result should be given as a json in the following way:\n"
             f"Languages should be represented by their respective codes:\n"
-            f" {', '.join(self.languages_codes)}\n"
+            f" {', '.join(self.languages.get_codes())}\n"
             f"    {{\n"
             f"        \"texts\": {{\"language1\": \"the language1 text goes here\",\n"
             f"                \"language2\": \"the language2 text goes here\",\n"

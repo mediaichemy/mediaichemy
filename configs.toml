@@ -1,10 +1,10 @@
 [content.shortvideo]
 n_ideas = 1
 languages = ["en"]
-text_details = 'Inspiring text about how AI is able to create really wild scenarios that could never really exist. Text is short, should be read in a little less than 10 seconds.'
-img_tags = 'amazing, scenario, unreal, wild, AI, creativity, cute monsters, realistic human'
+text_details = 'Real short text, less than 150 characters. A really psychedelic and random scenario, very impressive and colorful, with surreal elements to it, things that could not really exist and are amazing. Mixing elements that dont exist together in the real world.'
+img_tags = ''
 extension_method = 'ai'
 
 
 [ai.speech.elevenlabs]
-voice_settings.speed = 1.0
+voice_settings.speed = 1.2

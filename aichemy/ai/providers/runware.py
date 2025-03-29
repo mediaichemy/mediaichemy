@@ -1,6 +1,6 @@
 import logging
 from aichemy.ai.provider import Provider
-from aichemy.ai.providers.runware import Runware, IImageInference
+from runware import Runware, IImageInference
 import os
 from aichemy.tools.filehandling import JPEGFile
 from aichemy.configs import ConfigManager

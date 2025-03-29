@@ -3,7 +3,7 @@ import subprocess
 from math import ceil
 import logging
 from aichemy.tools.filehandling import JPEGFile, MP4File
-from aichemy.ai.provider import ai_request
+from aichemy.ai.request import ai_request
 
 logger = logging.getLogger(__name__)
 
@@ -237,4 +237,5 @@ class VideoEdit:
             videos_to_add.append(video_continue)
             current_video = video_continue
         extended_video = self.combine_videos(videos_to_add=videos_to_add)
+        [os.remove(file) for file in videos_to_add]
         return extended_video
