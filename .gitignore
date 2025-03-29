@@ -178,6 +178,6 @@ keys.json
 content/*
 dev.ipynb
 dev
-content
+/content
 
 *.DS_Store
