@@ -1,15 +1,14 @@
-pyaudioop
 elevenlabs
 langcodes
 language_data
 ipywidgets
 ipykernel
 matplotlib
-moviepy
 mutagen
 openai
 pydub
 pytube
+pytest
 requests
 runware
 toml

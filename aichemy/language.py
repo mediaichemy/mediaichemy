@@ -1,7 +1,6 @@
-from dataclasses import dataclass
+from pydantic.dataclasses import dataclass
 import langcodes
 from typing import List, Dict
-from .utils import validate_types
 import logging
 
 # Initialize logger
@@ -15,7 +14,6 @@ class Language:
     """
     language: str
 
-    @validate_types
     def __post_init__(self):
         """
         Initializes the Language object by resolving
@@ -39,7 +37,6 @@ class Languages:
     """
     languages: List[str]
 
-    @validate_types
     def __post_init__(self):
         """
         Initializes the Languages object by

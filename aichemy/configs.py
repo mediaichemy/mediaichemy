@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 class ConfigManager:
     def __init__(self):
         """
-        Initialize the ConfigManager by searching for the "config.toml" file
+        Initialize the ConfigManager by searching for the "configs.toml" file
         in the caller's directory and loading default configurations.
         """
         self.config_file_path = self._find_config_file()
@@ -18,19 +18,19 @@ class ConfigManager:
 
     def _find_config_file(self) -> str:
         """
-        Locate the "config.toml" file in the caller's directory.
+        Locate the "configs.toml" file in the caller's directory.
 
         Returns:
-            str: The full path to the "config.toml" file.
+            str: The full path to the "configs.toml" file.
 
         Raises:
-            FileNotFoundError: If the "config.toml" file is not found.
+            FileNotFoundError: If the "configs.toml" file is not found.
         """
         caller_directory = os.getcwd()
-        config_file_path = os.path.join(caller_directory, "config.toml")
+        config_file_path = os.path.join(caller_directory, "configs.toml")
         if not os.path.exists(config_file_path):
             logger.warning(
-                "'config.toml' not found in directory: %s. "
+                "'configs.toml' not found in directory: %s. "
                 "Falling back to 'default_configs.toml'.",
                 caller_directory
             )

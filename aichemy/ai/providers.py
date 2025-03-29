@@ -16,12 +16,6 @@ class Provider(ABC):
     """
     Base class for providers requiring an API key.
     """
-    PROVIDERS = {
-        "openrouter": "OpenRouterProvider",
-        "runware": "RunwareProvider",
-        "minimax": "MinimaxProvider",
-        "elevenlabs": "ElevenLabsProvider",
-    }
 
     def __init__(self, api_key: str):
         self.api_key = api_key
@@ -32,21 +26,6 @@ class Provider(ABC):
         Abstract method to handle requests.
         """
         pass
-
-    @classmethod
-    def create_provider(cls, provider_name: str) -> "Provider":
-        """
-        Factory method to create a provider instance.
-
-        :param provider_name: str
-            The name of the provider.
-        :return: Provider
-            An instance of the selected provider.
-        """
-        if provider_name not in cls.PROVIDERS:
-            raise ValueError(f"Provider '{provider_name}' is not supported.")
-        provider_class = globals()[cls.PROVIDERS[provider_name]]
-        return provider_class()
 
 
 class OpenRouterProvider(Provider):
@@ -331,12 +310,12 @@ class ElevenLabsProvider(Provider):
             str: The file path where the audio file has been saved.
         """
         config_manager = ConfigManager()
-        voice_id = config_manager.get("ai.audio.elevenlabs.voice_id")
-        voice_settings = config_manager.get("ai.audio.elevenlabs.voice_settings")
-
+        voice_id = config_manager.get("ai.speech.elevenlabs.voice_id")
+        voice_settings = config_manager.get(table="ai.speech.elevenlabs.voice_settings")
+        logger.debug(f"Voice settings: {voice_settings}")
         # Calling the text_to_speech conversion API with detailed parameters
         response = self.client.text_to_speech.convert(
-            voice_id=voice_id,  # Adam pre-made voice
+            voice_id=voice_id,
             optimize_streaming_latency="0",
             output_format="mp3_22050_32",
             text=prompt,
@@ -379,6 +358,8 @@ async def ai_request(media: str, prompt, **kwargs):
     :return: Any
         The result of the provider's request.
     """
+    if media == 'test_video':
+        return MP4File("content/short_video/0w9m9n67ws/video.mp4")
     config_manager = ConfigManager()
     provider_name = config_manager.get(table=f'ai.{media}', key='provider')
     logger.debug(f"Using provider '{provider_name}' for media '{media}'")

@@ -3,17 +3,20 @@ n_ideas = 1
 languages = ["en"]
 text_details = ''
 img_tags = ''
+extension_method = 'loop'
 
 [ai.image]
 provider = "runware"
 [ai.image.runware]
 model = "runware:101@1"
+height= 1344
+width= 768
 
 [ai.speech]
 provider = "elevenlabs"
 [ai.speech.elevenlabs]
 voice_id = "LcfcDJNUP1GQjkzn1xUU"
-voice_settings.voice_speed = 1.2
+voice_settings.speed = 1.2
 
 [ai.video]
 provider = "minimax"

@@ -1,12 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import Union, Literal
 from .base_prompts import PromptLibrary
 from ..utils import extract_json
 from ..ai.providers import ai_request
 from ..language import Languages
 from .content import Content, ShortVideo
 from ..configs import ConfigManager
-from .tools.video.extend_video import ExtendVideo
+from .tools.extend_video import ExtendVideo
 
 
 class ContentCreator(ABC):
@@ -71,6 +70,7 @@ class ShortVideoCreator(ContentCreator):
     """
     Represents the 'short_video' content type.
     """
+
     def __init__(self):
         """
         Initializes the ShortVideo content type.
@@ -100,11 +100,7 @@ class ShortVideoCreator(ContentCreator):
         ideas = [dict(x) for x in extract_json(raw_ideas)]
         return ideas
 
-    async def create(self, content: ShortVideo,
-                     loop=True,
-                     ai_video_generations: Union[int,
-                                                 Literal['undefined']] = 1,
-                     ) -> None:
+    async def create(self, content: ShortVideo) -> None:
         """
         Creates short video content based on the generated idea.
 
@@ -128,7 +124,8 @@ class ShortVideoCreator(ContentCreator):
             duration = speech.get_duration()
             extender = ExtendVideo(video)
             extender.extend_to_duration(target_duration=duration,
-                                        apply_boomerang_effect=True)
+                                        prompt=content.image_prompt,
+                                        method=self.configs['extend_method'])
 
         print(video)
         print(duration)
