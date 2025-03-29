@@ -11,6 +11,9 @@ logger = logging.getLogger(__name__)
 class ElevenLabsProvider(Provider):
     """
     Provider for ElevenLabs API.
+
+    :ivar api_key: str
+        The API key for the ElevenLabs API.
     """
     def __init__(self):
         api_key = os.getenv("ELEVENLABS_API_KEY")
@@ -29,11 +32,12 @@ class ElevenLabsProvider(Provider):
         and saves the resulting audio stream to an
         MP3 file with a unique name.
 
-        Args:
-            text (str): The text content to convert to speech.
-
-        Returns:
-            str: The file path where the audio file has been saved.
+        :param prompt: str
+            The text content to convert to speech.
+        :param output_path: str
+            The file path where the audio file will be saved.
+        :return: str
+            The file path where the audio file has been saved.
         """
         config_manager = ConfigManager()
         voice_id = config_manager.get("ai.speech.elevenlabs.voice_id")

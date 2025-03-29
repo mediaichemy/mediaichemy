@@ -1,10 +1,7 @@
-
-from aichemy.ai.providers import (
-    OpenRouterProvider,
-    RunwareProvider,
-    MinimaxProvider,
-    ElevenLabsProvider,
-)
+from aichemy.ai.providers.elevenlabs import ElevenLabsProvider
+from aichemy.ai.providers.openrouter import OpenRouterProvider
+from aichemy.ai.providers.runware import RunwareProvider
+from aichemy.ai.providers.minimax import MinimaxProvider
 from aichemy.configs import ConfigManager
 import logging
 from aichemy.tools.filehandling import MP4File
@@ -23,12 +20,12 @@ async def ai_request(media: str, prompt, **kwargs):
     """
     Unified interface to make a request to a provider.
 
-    :param provider_name: str
-        The name of the provider to use.
-    :param args: tuple
-        Positional arguments for the provider's request method.
+    :param media: str
+        The type of media to generate (e.g., "text", "image").
+    :param prompt: str
+        The prompt for the AI provider.
     :param kwargs: dict
-        Keyword arguments for the provider's request method.
+        Additional arguments for the provider's request method.
     :return: Any
         The result of the provider's request.
     """

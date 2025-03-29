@@ -11,6 +11,13 @@ logger = logging.getLogger(__name__)
 class Language:
     """
     Represents a single language with its code and name.
+
+    :param language: str
+        The input language code or name.
+    :ivar code: str
+        The resolved language code.
+    :ivar name: str
+        The resolved language name.
     """
     language: str
 
@@ -34,6 +41,13 @@ class Language:
 class Languages:
     """
     Represents a collection of languages.
+
+    :param languages: List[str]
+        A list of input languages.
+    :ivar names: List[str]
+        A list of resolved language names.
+    :ivar codes: List[str]
+        A list of resolved language codes.
     """
     languages: List[str]
 
@@ -75,6 +89,9 @@ class Languages:
 class LanguageTexts:
     """
     Represents text content in multiple languages.
+
+    :param texts: Dict[str, str]
+        A dictionary of language codes and their corresponding texts.
     """
     texts: Dict[str, str]
 

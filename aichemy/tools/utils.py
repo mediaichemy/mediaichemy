@@ -16,6 +16,11 @@ logger = logging.getLogger(__name__)
 def validate_types(func):
     """
     Decorator to validate function argument types.
+
+    :param func: Callable
+        The function to validate.
+    :return: Callable
+        The wrapped function with type validation.
     """
     @wraps(func)
     def wrapper(self, *args, **kwargs):
@@ -86,6 +91,14 @@ def _validate_type(value, expected_type):
 
 
 def RawJSONDecoder(index):
+    """
+    Creates a custom JSON decoder starting at a specific index.
+
+    :param index: int
+        The starting index for decoding.
+    :return: JSONDecoder
+        A custom JSON decoder class.
+    """
     class _RawJSONDecoder(json.JSONDecoder):
         end = None
 
@@ -101,8 +114,8 @@ def extract_json(s, index=0):
 
     :param s: str
         The string to extract JSON from.
-    :param index: int
-        The starting index for extraction.
+    :param index: int, optional
+        The starting index for extraction. Defaults to 0.
     :return: Generator[dict]
         A generator yielding JSON objects.
     """
@@ -118,8 +131,8 @@ def display_fonts(starting_at=2):
     """
     Displays system fonts starting from a given index.
 
-    :param starting_at: int
-        The index to start displaying fonts.
+    :param starting_at: int, optional
+        The index to start displaying fonts. Defaults to 2.
     """
     fonts = font_manager.findSystemFonts(fontpaths=None, fontext='ttf')
     for i in range(starting_at, len(fonts)):
@@ -137,6 +150,10 @@ def display_fonts(starting_at=2):
 class Capturing(list):
     """
     Captures stdout output during execution.
+
+    Methods:
+        __enter__: Starts capturing stdout.
+        __exit__: Stops capturing and stores the output.
     """
     def __enter__(self):
         self._stdout = sys.stdout

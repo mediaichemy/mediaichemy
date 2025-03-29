@@ -5,6 +5,18 @@ from aichemy.tools.language import Languages
 
 @dataclass
 class ShortVideoPrompt:
+    """
+    Represents a prompt for generating short video ideas.
+
+    :param n_ideas: int
+        Number of ideas to generate.
+    :param text_details: str
+        Details for the text content.
+    :param img_tags: List[str]
+        Tags for the image prompt.
+    :param languages: List[str]
+        List of languages for the content.
+    """
     n_ideas: int
     text_details: str
     img_tags: List[str]

@@ -11,6 +11,9 @@ logger = logging.getLogger(__name__)
 class RunwareProvider(Provider):
     """
     Provider for Runware API.
+
+    :ivar api_key: str
+        The API key for the Runware API.
     """
     def __init__(self):
         api_key = os.getenv("RUNWARE_API_KEY")

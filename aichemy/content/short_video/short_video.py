@@ -1,4 +1,3 @@
-
 from typing import Dict, List, Union
 from aichemy.tools.language import Languages, LanguageTexts
 from aichemy.tools.utils import validate_types
@@ -8,6 +7,11 @@ from aichemy.content.content import Content
 class ShortVideo(Content):
     """
     Represents a content idea for short videos.
+
+    :param input: Union[str, dict]
+        A string representing the path to a JSON file or a dictionary containing idea data.
+    :param name: str, optional
+        The name of the content idea. Defaults to an empty string.
     """
     def __init__(self,
                  input: Union[str, dict],

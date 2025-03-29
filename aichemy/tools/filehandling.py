@@ -17,6 +17,13 @@ logger = logging.getLogger(__name__)
 class Directory:
     """
     Handles directory operations.
+
+    :param path: str
+        The directory path.
+    :param create: bool, optional
+        Whether to create the directory if it doesn't exist. Defaults to False.
+    :param random_subdir: bool, optional
+        Whether to create a random subdirectory. Defaults to False.
     """
     def __init__(self, path: str,
                  create: bool = False,
@@ -49,6 +56,11 @@ class Directory:
 class File(ABC):
     """
     Abstract base class for file operations.
+
+    :param filepath: str
+        The file path.
+    :param output_path: str, optional
+        The output path for downloaded files.
     """
     def __init__(self, filepath: str, output_path: str = None) -> None:
         self.filepath = filepath

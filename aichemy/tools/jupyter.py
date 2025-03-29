@@ -7,16 +7,15 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def display_ideas(ideas: List[Dict]
-                  ) -> List[Dict[str, widgets.Checkbox]]:
+def display_ideas(ideas: List[Dict]) -> List[Dict[str, widgets.Checkbox]]:
     """
     Displays widgets for selecting ideas and their languages.
 
-    :param ideas: List[Dict]
-        A list of ideas to display.
-    :return: List[Dict[str, widgets.Checkbox]]
-        A list of dictionaries containing
-        the main checkbox and language checkboxes.
+    Args:
+        ideas (List[Dict]): A list of ideas to display.
+
+    Returns:
+        List[Dict[str, widgets.Checkbox]]: A list of dictionaries containing the main checkbox and language checkboxes.
     """
     selection_widgets: List[Dict[str, widgets.Checkbox]] = []
     container = widgets.VBox()
@@ -119,13 +118,13 @@ def select_ideas(
     """
     Filters ideas based on selected checkboxes.
 
-    :param ideas: List[Dict]
-        The list of ideas to filter.
-    :param selection_widgets: List[Dict[str, widgets.Checkbox]]
-        List of dictionaries containing the main checkbox
-        and language checkboxes.
-    :return: List[Dict]
-        A list of selected ideas with filtered languages.
+    Args:
+        ideas (List[Dict]): The list of ideas to filter.
+        selection_widgets (List[Dict[str, widgets.Checkbox]]):
+        ist of dictionaries containing the main checkbox and language checkboxes.
+
+    Returns:
+        List[Dict]: A list of selected ideas with filtered languages.
     """
     selected_ideas = []
 

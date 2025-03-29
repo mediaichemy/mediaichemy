@@ -11,6 +11,11 @@ logger = logging.getLogger(__name__)
 class Content(ABC):
     """
     Abstract base class for content ideas.
+
+    :param input: Union[str, dict]
+        A string representing the path to a JSON file or a dictionary containing idea data.
+    :param name: str, optional
+        The name of the content idea. Defaults to an empty string.
     """
     @validate_types
     def __init__(self, input: Union[str, dict], name: str = '') -> None:
@@ -51,6 +56,11 @@ class Content(ABC):
     def save(self) -> None:
         """
         Saves the idea as a JSON file.
+
+        :param idea_path: str
+            Path to the JSON file where the idea will be saved.
+        :param idea_dict: dict
+            Dictionary containing the idea data.
         """
         idea_path = self.dir + '/idea.json'
         idea_dict = self.input

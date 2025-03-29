@@ -10,6 +10,9 @@ logger = logging.getLogger(__name__)
 class OpenRouterProvider(Provider):
     """
     Provider for OpenRouter API.
+
+    :ivar api_key: str
+        The API key for the OpenRouter API.
     """
     def __init__(self):
         api_key = os.getenv("OPENROUTER_API_KEY")

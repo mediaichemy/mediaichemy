@@ -8,15 +8,18 @@ from aichemy.ai.provider import ai_request
 logger = logging.getLogger(__name__)
 
 
-class ExtendVideo:
+class VideoEdit:
     """
     A class to extend a video to a specified duration by applying effects,
     repeating, and trimming.
+
+    :param video: MP4File
+        The video file object.
     """
 
     def __init__(self, video: MP4File):
         """
-        Initializes the ExtendVideo class.
+        Initializes the VideoEdit class.
 
         :param video: MP4File
             The video file object.
@@ -32,8 +35,11 @@ class ExtendVideo:
 
         :param target_duration: float
             The target duration in seconds to which the video should be extended.
-        :param apply_boomerang_effect: bool
-            Whether to apply the boomerang effect to the video. Default is True.
+        :param method: str
+            The method to extend the video. Options are "loop" or "ai". Default is "loop".
+        :param prompt: str
+            The prompt for AI video generation. Default is None.
+        :return: None
         """
         if target_duration <= 0:
             raise ValueError("Target duration must be greater than 0 seconds.")
@@ -43,7 +49,7 @@ class ExtendVideo:
             # Calculate the number of repetitions needed to match or exceed the target duration
             n_repeat = ceil(target_duration / self.video.get_duration())
             # Repeat the video
-            self.repeat_video(n=n_repeat)
+            self.combine_videos(n=n_repeat)
         if method == "ai":
             await self.add_ai_videos(target_duration, prompt)
 
@@ -86,7 +92,7 @@ class ExtendVideo:
         else:
             return MP4File(boom_path)
 
-    def repeat_video(self, n: int = 0, videos_to_add=None, overwrite: bool = True) -> str:
+    def combine_videos(self, n: int = 0, videos_to_add=None, overwrite: bool = True) -> str:
         """
         Repeats a video file n times or appends additional videos.
 
@@ -184,6 +190,8 @@ class ExtendVideo:
         """
         Extracts the last frame of the video and saves it as a JPEG file.
 
+        :param video: MP4File
+            The video file object. Default is None.
         :return: str
             The path to the saved JPEG file.
         """
@@ -205,6 +213,16 @@ class ExtendVideo:
             raise
 
     async def add_ai_videos(self, target_duration, prompt=""):
+        """
+        Adds AI-generated videos to extend the duration of the original video.
+
+        :param target_duration: float
+            The target duration in seconds to which the video should be extended.
+        :param prompt: str
+            The prompt for AI video generation. Default is an empty string.
+        :return: str
+            The path to the extended video file.
+        """
         if prompt == "":
             logger.warning("No prompt provided for AI video generation.")
         current_video = self.video
@@ -218,5 +236,5 @@ class ExtendVideo:
                                               output_path=self.video.dir + f'/video_continue{n}.mp4')
             videos_to_add.append(video_continue)
             current_video = video_continue
-        extended_video = self.repeat_video(videos_to_add=videos_to_add)
+        extended_video = self.combine_videos(videos_to_add=videos_to_add)
         return extended_video

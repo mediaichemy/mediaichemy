@@ -7,6 +7,9 @@ logger = logging.getLogger(__name__)
 class Provider(ABC):
     """
     Base class for providers requiring an API key.
+
+    :param api_key: str
+        The API key for the provider.
     """
 
     def __init__(self, api_key: str):

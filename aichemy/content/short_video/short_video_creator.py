@@ -1,16 +1,20 @@
-
 from aichemy.tools.utils import extract_json
-from aichemy.ai.provider import ai_request
+from aichemy.ai.request import ai_request
 from aichemy.content.creator import ContentCreator
 from aichemy.configs import ConfigManager
-from aichemy.tools.extend_video import ExtendVideo
-from aichemy.content.short_video.content import ShortVideo
-from aichemy.content.short_video.prompt import ShortVideoPrompt
+from aichemy.edit.video import VideoEdit
+from aichemy.content.short_video.short_video import ShortVideo
+from aichemy.content.short_video.short_video_prompt import ShortVideoPrompt
 
 
 class ShortVideoCreator(ContentCreator):
     """
     Represents the 'short_video' content type.
+
+    :ivar configs: dict
+        Configuration settings for short video content.
+    :ivar prompt: ShortVideoPrompt
+        The prompt object for generating ideas.
     """
 
     def __init__(self):
@@ -29,8 +33,10 @@ class ShortVideoCreator(ContentCreator):
     async def generate_ideas(self):
         """
         Generates ideas for short video content.
+
         This method formats the prompt with the provided values and
         sends it to the AI provider to generate content ideas.
+
         :return: List[Dict]
             A list of generated ideas.
         """
@@ -43,7 +49,7 @@ class ShortVideoCreator(ContentCreator):
         """
         Creates short video content based on the generated idea.
 
-        :param idea: ShortVideo
+        :param content: ShortVideo
             The content idea to create content from.
         """
         img = await ai_request(media="image",
@@ -61,7 +67,7 @@ class ShortVideoCreator(ContentCreator):
                                       prompt=text,
                                       output_path=content.dir + '/speech.mp3')
             duration = speech.get_duration()
-            extender = ExtendVideo(video)
+            extender = VideoEdit(video)
             extender.extend_to_duration(target_duration=duration,
                                         prompt=content.image_prompt,
                                         method=self.configs['extend_method'])

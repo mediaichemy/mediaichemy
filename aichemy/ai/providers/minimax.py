@@ -13,8 +13,17 @@ logger = logging.getLogger(__name__)
 class MinimaxProvider(Provider):
     """
     Provider for Minimax API.
+
+    :ivar api_key: str
+        The API key for the Minimax API.
     """
     def __init__(self):
+        """
+        Initializes the MinimaxProvider.
+
+        :raises EnvironmentError:
+            If the MINIMAX_API_KEY environment variable is not set.
+        """
         api_key = os.getenv("MINIMAX_API_KEY")
         if not api_key:
             raise EnvironmentError("MINIMAX_API_KEY is not set.")
@@ -29,14 +38,14 @@ class MinimaxProvider(Provider):
 
         :param img_filepath: str
             The path to the input image file.
-        :param img_prompt: str
+        :param prompt: str
             The text prompt for the video.
         :param output_path: str
             The path to save the generated video.
-        :param model: str
-            The model to use.
         :return: MP4File
             The generated video file.
+        :raises Exception:
+            If the video generation task fails.
         """
         model = ConfigManager().get('ai.video.minimax.model')
         logger.info(
@@ -85,6 +94,8 @@ class MinimaxProvider(Provider):
             The payload for the video generation request.
         :return: str
             The task ID.
+        :raises httpx.HTTPStatusError:
+            If the HTTP request fails.
         """
         headers = {"authorization": f"Bearer {self.api_key}",
                    "Content-Type": "application/json"}
@@ -106,6 +117,8 @@ class MinimaxProvider(Provider):
             The path to save the generated video.
         :return: MP4File
             The generated video file.
+        :raises Exception:
+            If the video generation fails.
         """
         logger.info(f"Polling status for task ID: {task_id}")
         while True:
@@ -129,6 +142,8 @@ class MinimaxProvider(Provider):
             The task ID.
         :return: tuple[str, str]
             The file ID and status.
+        :raises httpx.HTTPStatusError:
+            If the HTTP request fails.
         """
         headers = {"authorization": f"Bearer {self.api_key}"}
         async with httpx.AsyncClient() as client:
@@ -147,6 +162,8 @@ class MinimaxProvider(Provider):
             The file ID.
         :return: str
             The download URL.
+        :raises httpx.HTTPStatusError:
+            If the HTTP request fails.
         """
         headers = {"authorization": f"Bearer {self.api_key}"}
         async with httpx.AsyncClient() as client:

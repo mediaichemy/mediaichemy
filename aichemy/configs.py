@@ -7,6 +7,16 @@ logger = logging.getLogger(__name__)
 
 
 class ConfigManager:
+    """
+    Manages configuration settings for the application.
+
+    :ivar config_file_path: str
+        Path to the configuration file.
+    :ivar defaults: dict
+        Default configuration settings.
+    :ivar config: dict
+        Merged configuration settings.
+    """
     def __init__(self):
         """
         Initialize the ConfigManager by searching for the "configs.toml" file
@@ -20,11 +30,11 @@ class ConfigManager:
         """
         Locate the "configs.toml" file in the caller's directory.
 
-        Returns:
-            str: The full path to the "configs.toml" file.
+        :returns: str
+            The full path to the "configs.toml" file.
 
-        Raises:
-            FileNotFoundError: If the "configs.toml" file is not found.
+        :raises FileNotFoundError:
+            If the "configs.toml" file is not found.
         """
         caller_directory = os.getcwd()
         config_file_path = os.path.join(caller_directory, "configs.toml")
@@ -43,8 +53,8 @@ class ConfigManager:
         Load the TOML configuration file and
         merge it with the default configurations.
 
-        Returns:
-            dict: Merged configuration data, prioritizing
+        :returns: dict
+            Merged configuration data, prioritizing
             values from the config file.
         """
         with open(self.config_file_path, 'r') as file:
@@ -58,12 +68,13 @@ class ConfigManager:
         Recursively merge two dictionaries, prioritizing values
         from the override dictionary.
 
-        Args:
-            base (dict): The base dictionary (e.g., defaults).
-            override (dict): The overriding dictionary (e.g., user config).
+        :param base: dict
+            The base dictionary (e.g., defaults).
+        :param override: dict
+            The overriding dictionary (e.g., user config).
 
-        Returns:
-            dict: The merged dictionary.
+        :returns: dict
+            The merged dictionary.
         """
         merged = base.copy()
         for key, value in override.items():
@@ -79,11 +90,11 @@ class ConfigManager:
         """
         Load default configurations from the "default_configs.toml" file.
 
-        Returns:
-            dict: Parsed default configuration data.
+        :returns: dict
+            Parsed default configuration data.
 
-        Raises:
-            FileNotFoundError: If the "default_configs.toml" file is not found.
+        :raises FileNotFoundError:
+            If the "default_configs.toml" file is not found.
         """
         default_config_path = os.path.join(os.path.dirname(__file__),
                                            "default_configs.toml")
@@ -97,12 +108,13 @@ class ConfigManager:
         """
         Resolve the full key path based on the provided table and key.
 
-        Args:
-            table (str, optional): The name of the table.
-            key (str, optional): The key or full key path.
+        :param table: str, optional
+            The name of the table.
+        :param key: str, optional
+            The key or full key path.
 
-        Returns:
-            list: A list of keys representing the full path.
+        :returns: list
+            A list of keys representing the full path.
         """
         if table is None:
             return key.split('.')
@@ -112,14 +124,14 @@ class ConfigManager:
         """
         Traverse the configuration dictionary using the provided keys.
 
-        Args:
-            keys (list): A list of keys representing the path.
+        :param keys: list
+            A list of keys representing the path.
 
-        Returns:
-            Any: The value at the specified path.
+        :returns: Any
+            The value at the specified path.
 
-        Raises:
-            ValueError: If the path does not exist in the configuration.
+        :raises ValueError:
+            If the path does not exist in the configuration.
         """
         table = self.config
         for k in keys:
@@ -133,8 +145,8 @@ class ConfigManager:
         """
         Apply default values to a specific table if they are not already set.
 
-        Args:
-            table (str): The name of the table to apply defaults to.
+        :param table: str
+            The name of the table to apply defaults to.
         """
         keys = table.split('.')
         table_ref = self.config
@@ -156,14 +168,15 @@ class ConfigManager:
         If both `table` and `key` are provided, or if `key` is a full
         key path, return the specific value.
 
-        Args:
-            table (str, optional): The name of the table (e.g. "image.runware")
-            key (str, optional): The key to retrieve. If `table` is None,
-                                 `key should be the full key path
-                                 (e.g., "image.runware.height").
+        :param table: str, optional
+            The name of the table (e.g. "image.runware").
+        :param key: str, optional
+            The key to retrieve. If `table` is None,
+            `key` should be the full key path
+            (e.g., "image.runware.height").
 
-        Returns:
-            Any: A dictionary of key-value pairs if a table is requested,
+        :returns: Any
+            A dictionary of key-value pairs if a table is requested,
             or a specific value if a key is requested.
         """
         if table:
