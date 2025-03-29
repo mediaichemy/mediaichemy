@@ -179,3 +179,5 @@ content/*
 dev.ipynb
 dev
 content
+
+*.DS_Store
