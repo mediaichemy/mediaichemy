@@ -18,6 +18,9 @@ provider = "elevenlabs"
 voice_id = "LcfcDJNUP1GQjkzn1xUU"
 voice_settings.speed = 1.2
 
+[ai.audio]
+background.urls = []
+
 [ai.video]
 provider = "minimax"
 [ai.video.minimax]

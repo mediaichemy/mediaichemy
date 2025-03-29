@@ -3,6 +3,7 @@ from aichemy.ai.request import ai_request
 from aichemy.content.creator import ContentCreator
 from aichemy.configs import ConfigManager
 from aichemy.edit.video import VideoEdit
+from aichemy.edit.audio import AudioEdit
 from aichemy.content.short_video.short_video import ShortVideo
 from aichemy.content.short_video.short_video_prompt import ShortVideoPrompt
 
@@ -71,6 +72,8 @@ class ShortVideoCreator(ContentCreator):
             video_editor.extend_to_duration(target_duration=duration,
                                             prompt=content.image_prompt,
                                             method=self.configs['extend_method'])
+            speech_editor = AudioEdit(speech)
+            speech_editor.add_audio_background()
 
         print(video)
         print(duration)
