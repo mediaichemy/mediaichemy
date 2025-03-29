@@ -2,8 +2,8 @@ import os
 import subprocess
 from math import ceil
 import logging
-from aichemy.filehandling import JPEGFile, MP4File
-from aichemy.ai.providers import ai_request
+from aichemy.tools.filehandling import JPEGFile, MP4File
+from aichemy.ai.provider import ai_request
 
 logger = logging.getLogger(__name__)
 
@@ -209,7 +209,7 @@ class ExtendVideo:
             logger.warning("No prompt provided for AI video generation.")
         current_video = self.video
         videos_to_add = []
-        while sum([v.get_duration() for v in [self.video] + videos_to_add]) < target_duration:
+        while sum([v.get_duration() for v in videos_to_add]) < target_duration:
             n = len(videos_to_add)
             lastframe = self.extract_last_frame(current_video)
             video_continue = await ai_request(media="video",
