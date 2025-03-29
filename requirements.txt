@@ -1,0 +1,16 @@
+pyaudioop
+elevenlabs
+langcodes
+language_data
+ipywidgets
+ipykernel
+matplotlib
+moviepy
+mutagen
+openai
+pydub
+pytube
+requests
+runware
+toml
+yt-dlp

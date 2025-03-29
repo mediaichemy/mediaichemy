@@ -1,0 +1,26 @@
+[content.shortvideo]
+n_ideas = 1
+languages = ["en"]
+text_details = ''
+img_tags = ''
+
+[ai.image]
+provider = "runware"
+[ai.image.runware]
+model = "runware:101@1"
+
+[ai.speech]
+provider = "elevenlabs"
+[ai.speech.elevenlabs]
+voice_id = "LcfcDJNUP1GQjkzn1xUU"
+voice_settings.voice_speed = 1.2
+
+[ai.video]
+provider = "minimax"
+[ai.video.minimax]
+model = "I2V-01"
+
+[ai.text]
+provider = "openrouter"
+[ai.text.openrouter]
+model = "auto"
