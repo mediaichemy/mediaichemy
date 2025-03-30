@@ -1,11 +1,8 @@
 # mediaichemy: AI-Powered Multimedia Content Creation
 
-
 <img src="docs/imgs/mediaichemy.png" min-width="200px" max-width="200px" width="300px" align="right" alt="">
 
 **mediaichemy** is a modular framework designed to simplify the creation of AI-driven multimedia content. It enables users to generate, edit, and combine images, videos, and audio seamlessly. With support for multiple AI providers and customizable workflows, MediaiChemy is the perfect tool for creating engaging short video content. 
-
----
 
 ## **Features**
 - **AI-Powered Media Generation**: Generate images, videos, and speech using AI providers.
