@@ -181,3 +181,4 @@ dev
 /content
 
 *.DS_Store
+.vscode/

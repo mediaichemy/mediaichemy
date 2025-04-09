@@ -1,0 +1,60 @@
+[content.shortvideo]
+n_ideas = 1
+languages = ["en"]
+text_details = ''
+img_tags = ''
+extension_method = 'loop'
+video.creation_method = 'static_image'
+
+[ai.image]
+provider = "runware"
+[ai.image.runware]
+model = "runware:101@1"
+height= 1344
+width= 768
+
+[ai.speech]
+provider = "elevenlabs"
+[ai.speech.elevenlabs]
+voice_id = "LcfcDJNUP1GQjkzn1xUU"
+voice_settings.speed = 1.2
+
+[ai.video]
+provider = "minimax"
+[ai.video.minimax]
+model = "I2V-01"
+
+[ai.text]
+provider = "openrouter"
+[ai.text.openrouter]
+model = "auto"
+
+[audio.background]
+urls = []
+relative_volume = 0.7
+
+[audio.silence]
+duration = 6
+
+[subtitles]
+fontname = "Verdana"  # Font name for subtitles
+fontsize = 18  # Font size
+primarycolor = "255,255,0,0"  # Dark yellow (RGBA)
+secondarycolor = "255,255,0,0"  # Same as primary color
+outlinecolor = "0,0,0,0"  # Black outline (RGBA)
+backcolor = "0,0,0,128"  # Semi-transparent black background (RGBA)
+bold = false  # Bold text
+italic = false  # Italic text
+underline = false  # Underlined text
+strikeout = false  # Strikeout text
+scalex = 100  # Horizontal scaling (percentage)
+scaley = 100  # Vertical scaling (percentage)
+spacing = 0  # Extra spacing between characters
+angle = 0  # Rotation angle
+borderstyle = 1  # Border style (1 = outline + shadow)
+outline = 0.3  # Outline thickness
+shadow = 1  # Shadow depth
+alignment = ["bottom_center", "top_center", "middle_center" ]  # Subtitle alignment (e.g., BOTTOM_CENTER, TOP_LEFT)
+margin_l = 10  # Left margin
+margin_r = 10  # Right margin
+margin_v = 20  # Vertical margin

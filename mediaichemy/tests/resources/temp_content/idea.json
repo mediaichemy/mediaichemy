@@ -1,0 +1,15 @@
+{
+    "texts": {
+        "en": "Chase your dreams with relentless passion. Every step forward is a victory, no matter how small. Keep going.",
+        "pt": "Persiga seus sonhos com paixão incansável. Cada passo à frente é uma vitória, não importa o quão pequeno. Continue seguindo."
+    },
+    "image_prompt": "determination, mountain summit, sunrise, hiker silhouette, golden light, vast horizon",
+    "captions": {
+        "en": "The climb may be tough, but the view from the top is worth it.",
+        "pt": "A subida pode ser difícil, mas a vista do topo vale a pena."
+    },
+    "languages": [
+        "en",
+        "pt"
+    ]
+}

@@ -1,13 +1,6 @@
 [content.shortvideo]
-n_ideas = 1
-languages = ["en"]
-text_details = 'Deep, but absolutely random, short text about life'
-img_tags = 'Amazing, fantastic, (insert other tags here describing a very specific unrealistic scene)'
-extension_method = 'ai'
-
-
-[ai.speech.elevenlabs]
-voice_settings.speed = 1.2
+n_ideas = 2
+languages = ["en", "pt"]
 
 [audio.background]
 urls = [
