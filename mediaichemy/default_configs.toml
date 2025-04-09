@@ -1,6 +1,6 @@
 [content.shortvideo]
-n_ideas = 1
-languages = ["en"]
+n_ideas = 2
+languages = ["en", "pt"]
 text_details = ''
 img_tags = ''
 extension_method = 'loop'
@@ -30,7 +30,11 @@ provider = "openrouter"
 model = "auto"
 
 [audio.background]
-urls = []
+urls = [
+    "https://www.youtube.com/watch?v=57rLUnu23P0",
+    "https://www.youtube.com/watch?v=i8km7dWAsQA",
+    "https://www.youtube.com/watch?v=NTj5EEM_SOY"
+]
 relative_volume = 0.7
 
 [audio.silence]
