@@ -29,82 +29,83 @@
    ```bash
    pip install -e .
    ```
+3. Set up API keys for supported providers (see below).
 
-3. Ensure `ffmpeg` is installed on your system:
-   ```bash
-   # macOS
-   brew install ffmpeg
+## AI Providers
 
-   # Linux
-   sudo apt install ffmpeg
+### Currently supported providers 
 
-   # Windows
-   choco install ffmpeg
-   ```
 
-4. Start creating content using `mediAIchemy` or `ai_request` (see sections below).
+`Text` [**OpenRouter**]()
 
----
+`Image`: [**Runware**]()
 
-## **Register**
+`Video`: [**MiniMax**]()
 
-To use `mediaichemy`, you need to register with the supported AI providers and set their API keys as environment variables.
+`Speech`: [**ElevenLabs**]()
+<br> 
 
-### **Supported Providers**
+#### Why we chose these providers
+These providers were chosen due to their flexibility, cost-effectiveness, popularity and support. `mediaichemy` is modular, making it easy to add more providers. We plan to expand support for other providers in the future.
+### Registration
 
-#### **Text Generation**
-- [OpenRouter](https://openrouter.ai/)  
-  Environment Variable: `OPENROUTER_API_KEY`
 
-#### **Image Generation**
-- [Runway](https://runwayml.com/)  
-  Environment Variable: `RUNWAY_API_KEY`
+Before you can start using **mediaichemy**, you need to register and configure API keys for the supported AI providers. Follow these steps:
 
-#### **Speech Generation**
-- [ElevenLabs](https://elevenlabs.io/)  
-  Environment Variable: `ELEVENLABS_API_KEY`
+1. **Create Accounts**:
+   - Click the links above to sign up for accounts with each AI providers.
 
-#### **Video Generation**
-- [MiniMax](https://minimax.com/)  
-  Environment Variable: `MINIMAX_API_KEY`
+2. **Obtain API Keys**:
+   - After registering, obtain API keys from each provider's dashboard.
 
-### **Setting API Keys**
+3. **Configure API Keys**:
+   - The recommended way to configure API keys is by setting them as environment variables. For example:
+     - `OPENROUTER_API_KEY="your_openrouter_api_key"`
+     - `RUNWARE_API_KEY="your_runware_api_key"`
+     - `MINIMAX_API_KEY="your_minimax_api_key"`
+     - `ELEVENLABS_API_KEY="your_elevenlabs_api_key"`
 
-Once you have registered with the providers, set the API keys as environment variables. Here’s how to do it:
+4. **Alternative: Use `configs.toml`**:
+   - If you prefer, you can add the API keys directly to a `configs.toml` file in your working directory in the following format:
+     ```toml
+     [ai.text.openrouter]
+     api_key = "your_openrouter_api_key"
 
-#### **macOS/Linux**
-Add the following lines to your `~/.bashrc` or `~/.zshrc` file:
-```bash
-export OPENROUTER_API_KEY="your_openrouter_api_key"
-export RUNWAY_API_KEY="your_runway_api_key"
-export ELEVENLABS_API_KEY="your_elevenlabs_api_key"
-export MINIMAX_API_KEY="your_minimax_api_key"
+     [ai.image.runware]
+     api_key = "your_runware_api_key"
+
+     [ai.video.minimax]
+     api_key = "your_minimax_api_key"
+
+     [ai.speech.elevenlabs]
+     api_key = "your_elevenlabs_api_key"
+     ```
+ 
+## How to use it
+
+### Single media
+The `ai_request` function provides a unified interface for generating individual media types (e.g., text, images, videos, or audio) using AI providers. It abstracts the complexity of interacting with different APIs, allowing you to focus on the content.
+
+#### Example: Generate an AI Image
+```python
+from mediaichemy.ai.request import ai_request
+
+# Generate an image using a prompt
+image = await ai_request(
+    media="image",
+    prompt="futuristic cityscape, sunset, vibrant colors, high detail",
+    output_path="output/image.jpg"
+)
+
+print(f"Image saved at: {image.path}")
 ```
-Then, reload your shell configuration:
-```bash
-source ~/.bashrc  # or ~/.zshrc
-```
+To see more examples
+[check the full documentation](https://github.com/your-repo/mediaichemy/wiki)
 
-#### **Windows**
-Use the `setx` command in the Command Prompt:
-```cmd
-setx OPENROUTER_API_KEY "your_openrouter_api_key"
-setx RUNWAY_API_KEY "your_runway_api_key"
-setx ELEVENLABS_API_KEY "your_elevenlabs_api_key"
-setx MINIMAX_API_KEY "your_minimax_api_key"
-```
+### Multimedia
+The mediaAIChemist class enables seamless workflows for creating complex multimedia content by combining multiple AI-generated media types and applying audio and video edits.
 
-After setting the environment variables, restart your terminal or IDE to ensure the changes take effect.
-
----
-
-## **mediAIchemy**
-
-`mediAIchemy` provides an integrated workflow for creating multimedia content by combining AI services and video/audio editing. It allows users to define workflows that generate and process media in a modular and customizable way.
-
-### **General Workflow Example**
-
-Below is an example of a general workflow using `mediAIchemy`:
+Content can be fully customized by adding configurations to a `configs.toml` in your working directory. You can find multiple configuration examples [here.]()
 
 ```python
 from mediaichemy import mediaAIChemist
