@@ -80,7 +80,7 @@ Before you can start using **mediaichemy**, you need to register and configure A
      [ai.speech.elevenlabs]
      api_key = "your_elevenlabs_api_key"
      ```
-
+ 
 ## How to use it
 
 ### Single media
