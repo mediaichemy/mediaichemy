@@ -22,11 +22,11 @@ class MinimaxProvider(Provider):
         Initializes the MinimaxProvider.
 
         :raises EnvironmentError:
-            If the MINIMAX_API_KEY environment variable is not set.
+            If no API key is found in the configs or the MINIMAX_API_KEY environment variable.
         """
-        api_key = os.getenv("MINIMAX_API_KEY")
+        api_key = ConfigManager().get("ai.video.minimax.api_key") or os.getenv("MINIMAX_API_KEY")
         if not api_key:
-            raise EnvironmentError("MINIMAX_API_KEY is not set.")
+            raise EnvironmentError("No API key found in configs or MINIMAX_API_KEY environment variable.")
         super().__init__(api_key)
         self.base_url = "https://api.minimaxi.chat/v1"
 

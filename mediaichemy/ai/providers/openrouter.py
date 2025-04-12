@@ -15,12 +15,17 @@ class OpenRouterProvider(Provider):
         The API key for the OpenRouter API.
     """
     def __init__(self):
-        api_key = os.getenv("OPENROUTER_API_KEY")
+        """
+        Initializes the OpenRouterProvider.
+
+        :raises EnvironmentError:
+            If no API key is found in the configs or the OPENROUTER_API_KEY environment variable.
+        """
+        api_key = ConfigManager().get("ai.text.openrouter.api_key") or os.getenv("OPENROUTER_API_KEY")
         if not api_key:
-            raise EnvironmentError("OPENROUTER_API_KEY is not set.")
+            raise EnvironmentError("No API key found in configs or OPENROUTER_API_KEY environment variable.")
         super().__init__(api_key)
-        self.model_dicts = {'auto': 'openrouter/auto',
-                            'deepseek': 'deepseek/deepseekr1'}
+        self.model_dicts = {'auto': 'openrouter/auto', 'deepseek': 'deepseek/deepseekr1'}
         self.base_url = "https://openrouter.ai/api/v1"
 
     async def request(self, prompt: str, output_path=None,) -> str:

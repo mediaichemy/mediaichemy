@@ -16,9 +16,15 @@ class ElevenLabsProvider(Provider):
         The API key for the ElevenLabs API.
     """
     def __init__(self):
-        api_key = os.getenv("ELEVENLABS_API_KEY")
+        """
+        Initializes the ElevenLabsProvider.
+
+        :raises EnvironmentError:
+            If no API key is found in the configs or the ELEVENLABS_API_KEY environment variable.
+        """
+        api_key = ConfigManager().get("ai.speech.elevenlabs.api_key") or os.getenv("ELEVENLABS_API_KEY")
         if not api_key:
-            raise EnvironmentError("ELEVENLABS_API_KEY is not set.")
+            raise EnvironmentError("No API key found in configs or ELEVENLABS_API_KEY environment variable.")
         super().__init__(api_key)
         self.client = ElevenLabs(api_key=api_key)
 

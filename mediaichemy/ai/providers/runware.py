@@ -16,9 +16,15 @@ class RunwareProvider(Provider):
         The API key for the Runware API.
     """
     def __init__(self):
-        api_key = os.getenv("RUNWARE_API_KEY")
+        """
+        Initializes the RunwareProvider.
+
+        :raises EnvironmentError:
+            If no API key is found in the configs or the RUNWARE_API_KEY environment variable.
+        """
+        api_key = ConfigManager().get("ai.image.runware.api_key") or os.getenv("RUNWARE_API_KEY")
         if not api_key:
-            raise EnvironmentError("RUNWARE_API_KEY is not set.")
+            raise EnvironmentError("No API key found in configs or RUNWARE_API_KEY environment variable.")
         super().__init__(api_key)
 
     async def request(self, prompt: str,
