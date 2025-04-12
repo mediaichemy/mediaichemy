@@ -3,6 +3,7 @@ from typing import Union
 from mediaichemy.tools.filehandling import Directory, JSONFile
 from ..tools.utils import validate_types
 import logging
+import os
 
 # Initialize logger
 logger = logging.getLogger(__name__)
@@ -96,3 +97,33 @@ class Content(ABC):
         except Exception as e:
             logger.error(f"Failed to load state from {state_file}: {e}")
             raise
+
+    def purge(self, ready_string: str = 'edited_video') -> None:
+        """
+        Deletes the content directory and all its contents.
+        """
+        for file_name in os.listdir(self.dir):
+            file_path = os.path.join(self.dir, file_name)
+            if os.path.isfile(file_path):
+                # Keep files that match the criteria
+                if (
+                    ready_string in file_name or
+                    file_name in {"idea.json", "image.jpg", "video.mp4"}
+                ):
+                    continue
+                # Delete other files
+                os.remove(file_path)
+                logger.debug(f"Deleted: {file_path}")
+
+    def list_files(self, extensions=None):
+        """
+        List all files in the given path. If extensions are provided, filter files by those extensions.
+        :param extensions: List of file extensions to filter (default: None, which lists all files).
+        :return: List of file paths.
+        """
+        files_list = []
+        for root, _, files in os.walk(self.dir):
+            for file in files:
+                if extensions is None or any(file.lower().endswith(ext) for ext in extensions):
+                    files_list.append(os.path.join(root, file))
+        return files_list

@@ -85,12 +85,12 @@ def test_short_video_initialization():
 
 
 @pytest.mark.asyncio
-async def test_short_video_states():
+async def test_short_video_states(copy_mock_content):
     """
     Test the STATES dictionary of the ShortVideo class.
     """
     # Create a ShortVideo object
-    short_video = ShortVideo("mediaichemy/tests/resources/temp_content/idea.json")
+    short_video = ShortVideo("tests/resources/temp_content/idea.json")
 
     # Assert the keys of the STATES dictionary
     assert list(short_video.STATES.keys()) == [
@@ -130,19 +130,19 @@ async def test_short_video_states():
     assert isinstance(states["video_edited"][1], dict)
     for language, mp4_file in states["video_edited"][1].items():
         assert isinstance(mp4_file, MP4File)
-        assert mp4_file.filepath == f"{short_video.dir}/{language}_video.mp4"
+        assert mp4_file.filepath == f"{short_video.dir}/{language}_edited_video.mp4"
 
     # Check "subtitles_added" state
     assert states["subtitles_added"] == [5, "Content created"]
 
 
-def test_short_video_content():
+def test_short_video_content(copy_mock_content):
     # Create a ShortVideo object
-    short_video = ShortVideo("mediaichemy/tests/resources/temp_content/idea.json")
+    short_video = ShortVideo("tests/resources/temp_content/idea.json")
 
     # Check if the ShortVideo object is created successfully
     assert isinstance(short_video, ShortVideo)
-    assert short_video.dir == 'mediaichemy/tests/resources/temp_content'
+    assert short_video.dir == 'tests/resources/temp_content'
 
     # Assert that the attributes are correctly set
     assert short_video.texts.get_text("en") == ("Chase your dreams with relentless passion. Every step forward is a "
@@ -209,111 +209,3 @@ async def test_short_video_creator():
 
     # Assert that the directory no longer exists
     assert not os.path.exists(content.dir), f"Directory still exists: {content.dir}"
-
-
-@pytest.mark.asyncio
-async def test_short_video_creation_imagecreate_loopextend():
-    content = ShortVideo("mediaichemy/tests/resources/temp_content/idea.json")
-    creator = ShortVideoCreator()
-    image = await creator.run_image_creation(content)
-    assert isinstance(image, JPEGFile)
-    assert image.filepath == "mediaichemy/tests/resources/temp_content/image.jpg"
-    assert os.path.exists(image.filepath), f"Image file does not exist: {image.filepath}"
-
-    video = await creator.run_video_creation(content, image, creation_method='ai')
-    assert isinstance(video, MP4File)
-    assert video.filepath == "mediaichemy/tests/resources/temp_content/video.mp4"
-    assert os.path.exists(video.filepath), f"Video file does not exist: {video.filepath}"
-
-    speechs = await creator.run_speech_creation(content)
-    assert isinstance(speechs, dict)
-    assert isinstance(speechs['en'], MP3File)
-    assert speechs['en'].filepath == "mediaichemy/tests/resources/temp_content/en_speech.mp3"
-    assert os.path.exists(speechs['en'].filepath), f"Speech file does not exist: {speechs['en'].filepath}"
-
-    assert isinstance(speechs, dict)
-    assert isinstance(speechs['pt'], MP3File)
-    assert speechs['pt'].filepath == "mediaichemy/tests/resources/temp_content/pt_speech.mp3"
-    assert os.path.exists(speechs['pt'].filepath), f"Speech file does not exist: {speechs['pt'].filepath}"
-
-    videos = await creator.run_video_editing(content, video, speechs, extension_method='loop')
-    assert isinstance(videos, dict)
-    videos = await creator.run_subtitling(content, videos)
-
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/.state")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/background_random_part.mp3")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/background.mp3")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_speech_mix.mp3")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_speech_silence.mp3")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_speech.mp3")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_video.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_speech_mix.mp3")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_speech_silence.mp3")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_speech.mp3")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_video.mp4")
-
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_video_boomerang_concat_trim_w_audio_2.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_video_boomerang_concat_trim_w_audio_5.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_video_boomerang_concat_trim_w_audio_8.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_video_boomerang_concat_trim_w_audio.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_video_boomerang_concat_trim.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_video_boomerang_concat.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_video_boomerang.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_video_boomerang_concat_trim_w_audio_2.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_video_boomerang_concat_trim_w_audio_5.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_video_boomerang_concat_trim_w_audio_8.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_video_boomerang_concat_trim_w_audio.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_video_boomerang_concat_trim.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_video_boomerang_concat.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_video_boomerang.mp4")
-
-    assert all([v.get_duration() == 9.664989 for v in videos['en']])
-    assert all([v.get_duration() == 13.243991 for v in videos['pt']])
-
-
-@pytest.mark.asyncio
-async def test_short_video_creation_aicreate_aiextend():
-    content = ShortVideo("mediaichemy/tests/resources/temp_content/idea.json")
-    creator = ShortVideoCreator()
-    image = await creator.run_image_creation(content)
-
-    content.state = 'image_created'
-
-    video = await creator.run_video_creation(content, image, creation_method='static_image')
-    assert isinstance(video, MP4File)
-    assert video.filepath == "mediaichemy/tests/resources/temp_content/image_video.mp4"
-    assert os.path.exists(video.filepath), f"Video file does not exist: {video.filepath}"
-
-    speechs = await creator.run_speech_creation(content)
-    assert isinstance(speechs, dict)
-    assert isinstance(speechs['en'], MP3File)
-    assert speechs['en'].filepath == "mediaichemy/tests/resources/temp_content/en_speech.mp3"
-    assert os.path.exists(speechs['en'].filepath), f"Speech file does not exist: {speechs['en'].filepath}"
-
-    videos = await creator.run_video_editing(content, video, speechs, extension_method='ai')
-    assert isinstance(videos, dict)
-    videos = await creator.run_subtitling(content, videos)
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_video_ai_extension0_lastframe.jpg")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_video_ai_extension0.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_video_ai_extension1.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_video_concat_trim_w_audio_2.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_video_concat_trim_w_audio_5.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_video_concat_trim_w_audio_8.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_video_concat_trim_w_audio.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_video_concat_trim.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_video_concat.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_video_lastframe.jpg")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/en_video.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_video_ai_extension0_lastframe.jpg")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_video_ai_extension0.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_video_ai_extension1.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_video_concat_trim_w_audio_2.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_video_concat_trim_w_audio_5.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_video_concat_trim_w_audio_8.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_video_concat_trim_w_audio.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_video_concat_trim.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_video_concat.mp4")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_video_lastframe.jpg")
-    assert os.path.exists("mediaichemy/tests/resources/temp_content/pt_video.mp4")
-    assert all([v.get_duration() == 9.664989 for v in videos['en']])
-    assert all([v.get_duration() == 13.243991 for v in videos['pt']])

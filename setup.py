@@ -27,7 +27,16 @@ setup(
         "runware==0.4.8",
         "setuptools==78.1.0",
         "toml==0.10.2",
+        "yt-dlp==2025.3.31"
     ],
+    extras_require={
+        "tests": [
+            "pytest==8.3.5",
+            "pytest-asyncio==0.26.0",
+            "pytest-cov==6.1.1",
+            "flake8==6.1.0",
+        ],
+    },
     python_requires=">=3.8",
     classifiers=[
         "Programming Language :: Python :: 3",

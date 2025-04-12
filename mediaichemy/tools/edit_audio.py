@@ -56,7 +56,7 @@ def download_random_from_youtube_urls(urls: list, output_path: str) -> MP3File:
         raise
 
 
-@log
+# @log
 def add_silence(audio, duration: int = None) -> MP3File:
     silence_path = audio.filepath.replace(".mp3", "_silence.mp3")
 
@@ -155,9 +155,9 @@ def mix_audio(audio: MP3File, audio2: MP3File, relative_volume: float = 1.0) -> 
 
 
 @log
-def add_audio_background(video, audio, background: MP3File = None) -> MP3File:
-    if not video:
-        raise ValueError("No video file provided to add audio background to.")
+def add_audio_background(audio, background: MP3File = None) -> MP3File:
+    background_path = audio.filepath.replace(".mp3", "_background.mp3")
+
     configs = ConfigManager().get(table='audio.background')
     background_urls = configs.get('urls')
     relative_volume = configs.get('relative_volume')
@@ -168,8 +168,8 @@ def add_audio_background(video, audio, background: MP3File = None) -> MP3File:
     if not background:
         if background_urls:
             background = download_random_from_youtube_urls(background_urls,
-                                                           output_path=audio.dir + '/background.mp3')
-    background_section = extract_random_section(background, duration=video.get_duration())
+                                                           output_path=background_path)
+    background_section = extract_random_section(background, duration=audio.get_duration())
     mixed_audio = mix_audio(audio=audio,
                             audio2=background_section, relative_volume=relative_volume)
 

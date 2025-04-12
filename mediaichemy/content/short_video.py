@@ -5,9 +5,7 @@ from mediaichemy.tools.utils import validate_types, extract_json
 from mediaichemy.content.content import Content
 from mediaichemy.ai.request import ai_request
 from mediaichemy.content.creator import ContentCreator
-from mediaichemy.content.checkpoint import checkpoint
 from mediaichemy.configs import ConfigManager
-from mediaichemy.tools import edit_audio, edit_text, edit_video
 from mediaichemy.tools.filehandling import JPEGFile, MP3File, MP4File
 
 
@@ -65,7 +63,8 @@ class ShortVideo(Content):
                                 {language: MP3File(f'{self.dir}/{language}_speech.mp3')
                                  for language in self.languages}],
              "video_edited": [4,
-                              {language: MP4File(f'{self.dir}/{language}_video.mp4') for language in self.languages}],
+                              {language: MP4File(f'{self.dir}/{language}_edited_video.mp4')
+                               for language in self.languages}],
              "subtitles_added": [5, 'Content created']
              }
 
@@ -98,70 +97,9 @@ class ShortVideoCreator(ContentCreator):
     async def create(self, content: ShortVideo) -> None:
         image = await self.run_image_creation(content)
         video = await self.run_video_creation(content, image,
-                                              creation_method=self.configs['video.creation_method'])
+                                              creation_method=self.configs['video']['creation_method'])
         speech = await self.run_speech_creation(content)
-        speech, video = self.run_video_editing(content, video, speech,
-                                               extension_method=self.configs['extension_method'])
-        video = self.run_subtitling(video)
-
-    @staticmethod
-    @checkpoint('image_created')
-    async def run_image_creation(content):
-        image = await ai_request(media="image",
-                                 output_path=content.dir + '/image.jpg',
-                                 prompt=content.image_prompt)
-        return image
-
-    @staticmethod
-    @checkpoint('video_created')
-    async def run_video_creation(content, image, creation_method):
-        if creation_method == 'static_image':
-            video = edit_video.create_video_from_image(image=image,
-                                                       duration=10)
-        if creation_method == 'ai':
-            video = await ai_request(media="video",
-                                     prompt=content.image_prompt,
-                                     output_path=content.dir + '/video.mp4',
-                                     input_path=image.filepath)
-        return video
-
-    @staticmethod
-    @checkpoint('speech_created')
-    async def run_speech_creation(content):
-        lang_speechs = {}
-        for language in content.languages:
-            text = content.texts.get_text(language)
-            speech = await ai_request(media="speech",
-                                      prompt=text,
-                                      output_path=f'{content.dir}/{language}_speech.mp3')
-            lang_speechs[language] = speech
-        return lang_speechs
-
-    @staticmethod
-    # @checkpoint('video_edited')
-    async def run_video_editing(content, video, speechs, extension_method):
-        lang_videos = {}
-        for language in content.languages:
-            speech = speechs[language]
-            speech_s = edit_audio.add_silence(speech)
-            lang_video = video.copy_to(f'{content.dir}/{language}_video.mp4')
-            lang_video = await edit_video.extend_to_duration(lang_video,
-                                                             target_duration=speech_s.get_duration(),
-                                                             prompt=content.image_prompt,
-                                                             method=extension_method)
-            background = edit_audio.add_audio_background(video, speech)
-            audio_video = edit_video.add_audio_to_video(lang_video, background)
-            lang_videos[language] = audio_video
-        return lang_videos
-
-    @staticmethod
-    @checkpoint('subtitles_added')
-    async def run_subtitling(content, videos):
-        subtitled_videos = {}
-        for language in content.languages:
-            video = videos[language]
-            text = content.texts.get_text(language)
-            text_editor = edit_text.Subtitles(text=text, video=video)
-            langsub_videos = text_editor.add_text_to_video()
-            subtitled_videos[language] = langsub_videos
+        edited_videos = await self.run_video_editing(content, video, speech,
+                                                     extension_method=self.configs['extension_method'])
+        subtitled_videos = await self.run_subtitling(content, edited_videos)
         return subtitled_videos

@@ -4,14 +4,14 @@ import shutil
 from unittest.mock import patch, AsyncMock
 
 
-with open('mediaichemy/tests/resources/short_video_mock/idea.json', 'r') as f:
+with open('tests/resources/mocks/short_video/idea.json', 'r') as f:
     mock_idea = f.read()
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="function", autouse=True)
 def set_env_variables():
     """
-    Set environment variables for the entire test session.
+    Set environment variables for the entire test function.
     """
     env_vars = {
         "MINIMAX_API_KEY": "mocked_minimax_api_key",
@@ -23,13 +23,13 @@ def set_env_variables():
         os.environ[key] = value
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="function")
 def copy_mock_content():
     """
-    Copy all content from 'mediaichemy/tests/resources/short_video_mock' to 'mediaichemy/tests/resources/temp_content'.
+    Copy all content from 'tests/resources/mocks/short_video' to 'tests/resources/temp_content'.
     """
-    source_dir = 'mediaichemy/tests/resources/short_video_mock'
-    target_dir = 'mediaichemy/tests/resources/temp_content'
+    source_dir = 'tests/resources/mocks/short_video'
+    target_dir = 'tests/resources/temp_content'
 
     # Remove the target directory if it already exists to ensure a clean copy
     if os.path.exists(target_dir):
@@ -48,12 +48,12 @@ def copy_mock_content():
         print(f"Cleaned up temporary content directory: {target_dir}")
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="function", autouse=True)
 def mock_providers():
     """
-    Mock all provider request methods for the entire test session.
+    Mock all provider request methods for the entire test function.
     """
-    mock_dir = 'mediaichemy/tests/resources/temp_content'
+    mock_dir = 'tests/resources/temp_content'
     # Mock OpenRouterProvider.request
     mock_openrouter_request = AsyncMock(return_value=mock_idea)
 
@@ -81,3 +81,30 @@ def mock_providers():
             "mock_minimax": mock_minimax,
             "mock_elevenlabs": mock_elevenlabs,
         }
+
+
+@pytest.fixture
+def temporary_configs_file():
+    """
+    Fixture to create a temporary configs.toml file in the working directory.
+    The file will exist only during the test execution and will be deleted afterward.
+    :return: Function to create the configs.toml file with raw TOML content.
+    """
+    def _create_configs(raw_toml: str):
+        # Define the path for the temporary configs.toml file
+        config_file_path = os.path.join(os.getcwd(), "configs.toml")
+
+        # Write the raw TOML content to the file
+        with open(config_file_path, "w") as config_file:
+            config_file.write(raw_toml)
+
+        # Return the path to the created file
+        return config_file_path
+
+    # Yield the function to allow the test to create the file
+    yield _create_configs
+
+    # Cleanup: Delete the file after the test
+    config_file_path = os.path.join(os.getcwd(), "configs.toml")
+    if os.path.exists(config_file_path):
+        os.remove(config_file_path)
