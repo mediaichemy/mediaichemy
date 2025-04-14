@@ -1,8 +1,8 @@
 # mediaichemy: AI-Powered Multimedia Content Creation
 
-<img src="docs/imgs/mediaichemy.png" min-width="200px" max-width="200px" width="200px" align="right" alt="">
+<img src="logo.png" min-width="200px" max-width="200px" width="200px" align="right" alt="">
 
-⚗️🧪🧫 **mediaichemy** is a modular framework designed to simplify the creation of A I-driven multimedia content. It enables users to generate, edit, and combine images, videos, and audio seamlessly. With support for multiple AI providers and customizable workflows, this is the perfect tool for automating AI content creation workflows. 
+⚗️🧪🧫 **mediaichemy** is a library designed to simplify the creation of AI-driven multimedia content. It enables users to generate, edit, and combine images, videos, and audio seamlessly. With support for multiple AI providers and customizable workflows, this is the perfect tool for automating AI content creation workflows. 
 
 
 ## Features
@@ -13,7 +13,7 @@
 👾 Support for multiple AI providers. 
 
 
-[`🧪 Check out the full documentation  →`](https://github.com/your-repo/mediaichemy/wiki)
+[`🧪 Check out the full documentation  →`](https://mediaichemy.github.io/)
 
 
 ## Examples of Created Content
@@ -100,7 +100,7 @@ image = await ai_request(
 print(f"Image saved at: {image.path}")
 ```
 To see more examples
-[check the full documentation](https://github.com/your-repo/mediaichemy/wiki)
+[check the full documentation](https://mediaichemy.github.io/)
 
 ### Multimedia
 The mediaAIChemist class enables seamless workflows for creating complex multimedia content by combining multiple AI-generated media types and applying audio and video edits.
@@ -125,7 +125,7 @@ media = await aichemist.create_content(content)
 print(f"Multimedia content created: {media}")
 ```
 ## Contributing
-Contributions are welcome! Check out our [contribution guidelines](https://github.com/your-repo/mediaichemy/wiki/Contributing).
+Contributions are welcome!
 
 
 ## License
