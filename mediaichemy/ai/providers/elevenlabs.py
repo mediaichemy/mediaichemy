@@ -2,7 +2,6 @@ import logging
 from mediaichemy.ai.provider import Provider
 import os
 from elevenlabs import ElevenLabs, VoiceSettings
-from mediaichemy.tools.filehandling import MP3File
 from mediaichemy.configs import ConfigManager
 
 logger = logging.getLogger(__name__)
@@ -70,4 +69,3 @@ class ElevenLabsProvider(Provider):
 
         # Return the path of the saved audio file
         return output_path
-
