@@ -66,8 +66,8 @@ class ElevenLabsProvider(Provider):
             for chunk in response:
                 if chunk:
                     f.write(chunk)
-        mp3file = MP3File(output_path)
         logger.info(f"Audio saved to {output_path}")
 
         # Return the path of the saved audio file
-        return mp3file
+        return output_path
+

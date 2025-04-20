@@ -63,6 +63,7 @@ class RunwareProvider(Provider):
         """
         config_manager = ConfigManager()
         model = config_manager.get("ai.image.runware").pop("model"),
+        config_manager.get("ai.image.runware").pop("api_key")
         return IImageInference(positivePrompt=prompt,
                                numberResults=1,
                                model=model,

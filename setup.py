@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="mediaichemy",
     version="0.1.0",
-    description="A Python Framework for AI-powered media editing and content creation.",
+    description="A Python library for AI powered multimedia content creation 🧪",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     author="Pedro Blaya Luz",

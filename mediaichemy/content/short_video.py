@@ -97,7 +97,7 @@ class ShortVideoCreator(ContentCreator):
     async def create(self, content: ShortVideo) -> None:
         image = await self.run_image_creation(content)
         video = await self.run_video_creation(content, image,
-                                              creation_method=self.configs['video']['creation_method'])
+                                              creation_method=self.configs['creation_method'])
         speech = await self.run_speech_creation(content)
         edited_videos = await self.run_video_editing(content, video, speech,
                                                      extension_method=self.configs['extension_method'])

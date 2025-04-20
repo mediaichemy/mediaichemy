@@ -4,7 +4,7 @@ languages = ["en", "pt"]
 text_details = ''
 img_tags = ''
 extension_method = 'loop'
-video.creation_method = 'static_image'
+creation_method = 'static_image'
 
 [ai.image]
 provider = "runware"

@@ -151,7 +151,7 @@ async def add_ai_videos(video, target_duration, prompt=""):
         lastframe = extract_last_frame(current_video)
         video_continue = await ai_request(media="video",
                                           prompt=prompt,
-                                          img_filepath=lastframe.filepath,
+                                          input_path=lastframe.filepath,
                                           output_path=n_path)
         videos_to_add.append(video_continue)
         current_video = video_continue
