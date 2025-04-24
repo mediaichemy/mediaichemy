@@ -134,7 +134,7 @@ class File(ABC):
         """
         if not filepath.endswith(expected_extension):
             raise ValueError(f"Invalid file extension for '{filepath}'."
-                             " Expected '{expected_extension}'.")
+                             f" Expected '{expected_extension}'.")
 
     @abstractmethod
     def save(self, data: Any) -> None:

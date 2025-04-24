@@ -1,9 +1,11 @@
 from mediaichemy.content.short_video import ShortVideo, ShortVideoCreator
-
+from mediaichemy.content.music_video import MusicVideo, MusicVideoCreator
 
 CONTENT = {
     "short_video": {'creator': ShortVideoCreator,
-                    'content': ShortVideo}
+                    'content': ShortVideo},
+    "music_video": {'creator': MusicVideoCreator,
+                    'content': MusicVideo}
 }
 
 

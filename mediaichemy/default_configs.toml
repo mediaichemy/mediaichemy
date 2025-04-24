@@ -1,10 +1,18 @@
-[content.shortvideo]
+[content.short_video]
 n_ideas = 2
 languages = ["en", "pt"]
 text_details = ''
 img_tags = ''
+
+[content.music_video]
+n_ideas = 2
+img_tags = ''
+video_url = 'https://www.youtube.com/watch?v=2Vv-BfVoq4g'
+n_subtitles = 6
+
+[video]
 extension_method = 'loop'
-creation_method = 'static_image'
+creation_method = 'ai'
 
 [ai.image]
 provider = "runware"

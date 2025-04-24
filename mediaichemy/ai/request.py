@@ -52,6 +52,9 @@ async def ai_request(media: str, prompt, output_path=None, **kwargs):
 
     if 'test' in response:
         logger.debug(f"Test mode: {response}")
+        if output_path is None and media == 'text':
+            logger.debug("Text response might include the test word, and not need to be saved.")
+            return response
         if not os.path.exists(output_path):
             TYPES[media](response.replace('test_', '')).copy_to(output_path)
         response = output_path

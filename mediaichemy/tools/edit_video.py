@@ -18,6 +18,7 @@ def add_audio_to_video(video, audio) -> MP4File:
     # Use ffmpeg to combine audio and video
     command = [
         "ffmpeg",
+        "-y",  # Overwrite output file if it exists
         "-i", video.filepath,  # Input video
         "-i", audio.filepath,  # Input audio
         "-map", "0",  # Map all streams from the video
@@ -36,10 +37,10 @@ def apply_boomerang(video) -> MP4File:
     subprocess.run(
         [
             'ffmpeg',
+            '-y',
             '-ss', '0',
             '-an',
             '-i', video.filepath,
-            '-y',
             '-filter_complex', "[0]split[b][c];[c]reverse[r];[b][r]concat",
             boom_path
         ],
@@ -65,6 +66,7 @@ def concat_videos(video, n: int = 0, videos_to_add=None) -> MP4File:
     subprocess.run(
         [
             'ffmpeg',
+            '-y',
             '-f', 'concat',
             '-safe', '0',
             '-i', concat_list_path,
@@ -172,12 +174,12 @@ def create_video_from_image(image: JPEGFile, duration: int) -> MP4File:
     # Use ffmpeg to create a video from the image
     command = [
         "ffmpeg",
+        "-y",  # Overwrite output file if it exists
         "-loop", "1",  # Loop the image
         "-i", image.filepath,  # Input image
         "-c:v", "libx264",  # Use H.264 codec
         "-t", str(duration),  # Set the duration
-        "-pix_fmt", "yuv420p",  # Ensure compatibility with most players
-        "-y",  # Overwrite output file if it exists
+        "-pix_fmt", "yuv420p",
         video_path
     ]
     subprocess.run(command, check=True)

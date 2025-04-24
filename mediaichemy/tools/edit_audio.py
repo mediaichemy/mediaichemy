@@ -9,9 +9,10 @@ logger = logging.getLogger(__name__)
 
 
 @log
-def download_random_from_youtube_urls(urls: list, output_path: str) -> MP3File:
+def download_from_youtube(urls: list, output_path: str) -> MP3File:
     """
-    Downloads a random audio file from a list of YouTube URLs as an MP3 file.
+    Download audio from a list of YouTube URLs and convert it to MP3 format.
+    If multiple URLs are provided, one is selected at random.
 
     :param urls: list
         A list of YouTube video URLs.
@@ -71,6 +72,7 @@ def add_silence(audio, duration: int = None) -> MP3File:
         # Use ffmpeg to add silence to the end of the audio file
         command = [
             "ffmpeg",
+            "-y",  # Overwrite output file if it exists
             "-i", audio.filepath,  # Input MP3 file
             "-f", "lavfi",  # Use lavfi to generate silence
             "-t", str(duration),  # Duration of silence
@@ -84,6 +86,29 @@ def add_silence(audio, duration: int = None) -> MP3File:
 
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to add silence to audio file: {e}")
+        raise
+
+
+@log
+def extract_section(audio, start: int, duration: int) -> MP3File:
+    section_path = audio.filepath.replace(".mp3", "_part.mp3")
+
+    try:
+        # Use ffmpeg to extract the section
+        command = [
+            "ffmpeg",
+            "-y",  # Overwrite output file if it exists
+            "-i", audio.filepath,  # Input MP3 file
+            "-ss", str(start),  # Start time
+            "-t", str(duration),  # Duration
+            "-c", "copy",  # Copy the audio stream without re-encoding
+            section_path
+        ]
+        subprocess.run(command, check=True)
+
+        return MP3File(section_path)
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to extract audio section: {e}")
         raise
 
 
@@ -105,6 +130,7 @@ def extract_random_section(audio, duration: int) -> MP3File:
         # Use ffmpeg to extract the section
         command = [
             "ffmpeg",
+            "-y",  # Overwrite output file if it exists
             "-i", audio.filepath,  # Input MP3 file
             "-ss", str(start_time),  # Start time
             "-t", str(duration),  # Duration
@@ -138,6 +164,7 @@ def mix_audio(audio: MP3File, audio2: MP3File, relative_volume: float = 1.0) -> 
         # Use ffmpeg to overlay the audio files with adjusted volumes
         command = [
             "ffmpeg",
+            "-y",  # Overwrite output file if it exists
             "-i", audio.filepath,  # Input first MP3 file
             "-i", audio2.filepath,  # Input second MP3 file
             "-filter_complex", (f"[0:a]volume={original_volume}"
@@ -167,8 +194,8 @@ def add_audio_background(audio, background: MP3File = None) -> MP3File:
         return audio
     if not background:
         if background_urls:
-            background = download_random_from_youtube_urls(background_urls,
-                                                           output_path=background_path)
+            background = download_from_youtube(background_urls,
+                                               output_path=background_path)
     background_section = extract_random_section(background, duration=audio.get_duration())
     mixed_audio = mix_audio(audio=audio,
                             audio2=background_section, relative_volume=relative_volume)

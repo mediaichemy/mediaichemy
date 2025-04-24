@@ -68,6 +68,21 @@ class ContentCreator(ABC):
         return edited_videos
 
     @staticmethod
+    @checkpoint('video_edited')
+    async def run_video_editing2(content, video, youtube_url, extension_method):
+        extended_video = await edit_video.extend_to_duration(video,
+                                                             target_duration=content.duration,
+                                                             prompt=content.image_prompt,
+                                                             method=extension_method)
+        audio = edit_audio.download_from_youtube([youtube_url],
+                                                 output_path=content.dir + '/audio.mp3')
+        part = edit_audio.extract_section(audio, start=content.start,
+                                          duration=content.duration,)
+        audio_video = edit_video.add_audio_to_video(extended_video, part)
+        edited_video = audio_video.copy_to(f'{content.dir}/edited_video.mp4')
+        return edited_video
+
+    @staticmethod
     @checkpoint('subtitles_added')
     async def run_subtitling(content, videos):
         subtitled_videos = {}
@@ -78,3 +93,10 @@ class ContentCreator(ABC):
             langsub_videos = text_editor.add_text_to_video()
             subtitled_videos[language] = langsub_videos
         return subtitled_videos
+
+    @staticmethod
+    @checkpoint('subtitles_added')
+    async def run_subtitling2(content, video):
+        text_editor = edit_text.Subtitles(text=' ', video=video)
+        subvideos = text_editor.add_subtitles(content.subtitles)
+        return subvideos

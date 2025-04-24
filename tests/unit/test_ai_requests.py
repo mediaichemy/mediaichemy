@@ -4,7 +4,7 @@ from mediaichemy.tools.filehandling import MP4File, JPEGFile, MP3File
 
 
 @pytest.mark.asyncio
-async def test_ai_request_text(mock_providers, copy_mock_content):
+async def test_ai_request_text(mock_providers, copy_mock_short_video):
     """
     Test ai_request for text generation using OpenRouterProvider.
     """
@@ -20,7 +20,7 @@ async def test_ai_request_text(mock_providers, copy_mock_content):
 
 
 @pytest.mark.asyncio
-async def test_ai_request_image(mock_providers, copy_mock_content):
+async def test_ai_request_image(mock_providers, copy_mock_short_video):
     """
     Test ai_request for image generation using RunwareProvider.
     """
@@ -33,7 +33,7 @@ async def test_ai_request_image(mock_providers, copy_mock_content):
 
 
 @pytest.mark.asyncio
-async def test_ai_request_video(mock_providers, copy_mock_content):
+async def test_ai_request_video(mock_providers, copy_mock_short_video):
     """
     Test ai_request for video generation using MinimaxProvider.
     """
@@ -48,7 +48,7 @@ async def test_ai_request_video(mock_providers, copy_mock_content):
 
 
 @pytest.mark.asyncio
-async def test_ai_request_speech(mock_providers, copy_mock_content):
+async def test_ai_request_speech(mock_providers, copy_mock_short_video):
     """
     Test ai_request for speech generation using ElevenLabsProvider.
     """

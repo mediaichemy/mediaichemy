@@ -41,7 +41,7 @@ def standard_configs_assertions(videos):
 
 
 @pytest.mark.asyncio
-async def test_short_video_creation_imagecreate_loopextend(copy_mock_content):
+async def test_short_video_creation_imagecreate_loopextend(copy_mock_short_video):
 
     content = ShortVideo("tests/resources/temp_content/idea.json")
     creator = ShortVideoCreator()
@@ -81,7 +81,7 @@ async def test_short_video_creation_imagecreate_loopextend(copy_mock_content):
 
 
 @pytest.mark.asyncio
-async def test_short_video_creation_aicreate_aiextend(copy_mock_content):
+async def test_short_video_creation_aicreate_aiextend(copy_mock_short_video):
     content = ShortVideo("tests/resources/temp_content/idea.json")
     creator = ShortVideoCreator()
     image = await creator.run_image_creation(content)
@@ -135,7 +135,7 @@ async def test_short_video_creation_aicreate_aiextend(copy_mock_content):
 
 
 @pytest.mark.asyncio
-async def test_short_video_create(copy_mock_content):
+async def test_short_video_create(copy_mock_short_video):
     content = ShortVideo("tests/resources/temp_content/idea.json")
     creator = ShortVideoCreator()
 

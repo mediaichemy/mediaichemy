@@ -85,7 +85,7 @@ def test_short_video_initialization():
 
 
 @pytest.mark.asyncio
-async def test_short_video_states(copy_mock_content):
+async def test_short_video_states(copy_mock_short_video):
     """
     Test the STATES dictionary of the ShortVideo class.
     """
@@ -136,7 +136,7 @@ async def test_short_video_states(copy_mock_content):
     assert states["subtitles_added"] == [5, "Content created"]
 
 
-def test_short_video_content(copy_mock_content):
+def test_short_video_content(copy_mock_short_video):
     # Create a ShortVideo object
     short_video = ShortVideo("tests/resources/temp_content/idea.json")
 
@@ -165,8 +165,7 @@ async def test_short_video_creator():
     Test the ShortVideoCreator class.
     """
     creator = ShortVideoCreator()
-    assert creator.configs == {'n_ideas': 2, 'languages': ['en', 'pt'], 'text_details': '', 'img_tags': '',
-                               'extension_method': 'loop', 'video': {'creation_method': 'static_image'}}
+    assert creator.configs == {'n_ideas': 2, 'languages': ['en', 'pt'], 'text_details': '', 'img_tags': ''}
     assert creator.content_type == 'short_video'
     assert creator.prompt == ('Create 2 texts for social media.\nDon\'t include emojis\n\nText details:'
                               ' \n\nFor each text write a prompt for creating an image that follows it.'

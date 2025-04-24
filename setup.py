@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="mediaichemy",
-    version="0.1.0",
+    version="0.1.0b1",
     description="A Python library for AI powered multimedia content creation 🧪",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
@@ -18,6 +18,7 @@ setup(
         "ipython==9.0.2",
         "ipywidgets==8.1.5",
         "langcodes==3.5.0",
+        "matplotlib==3.10.1",
         "mutagen==1.47.0",
         "Pillow==11.1.0",
         "pydantic==2.11.3",
@@ -27,7 +28,8 @@ setup(
         "runware==0.4.8",
         "setuptools==78.1.0",
         "toml==0.10.2",
-        "yt-dlp==2025.3.31"
+        "yt-dlp==2025.3.31",
+        "youtube-transcript-api==1.0.3"
     ],
     extras_require={
         "tests": [
@@ -39,8 +41,9 @@ setup(
     },
     python_requires=">=3.8",
     classifiers=[
+        "Development Status :: 4 - Beta",
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
+        "License :: MIT License",
         "Operating System :: OS Independent",
     ],
     entry_points={

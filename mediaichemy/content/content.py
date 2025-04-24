@@ -4,7 +4,7 @@ from mediaichemy.tools.filehandling import Directory, JSONFile
 from ..tools.utils import validate_types
 import logging
 import os
-
+import gc
 # Initialize logger
 logger = logging.getLogger(__name__)
 
@@ -114,6 +114,7 @@ class Content(ABC):
                 # Delete other files
                 os.remove(file_path)
                 logger.debug(f"Deleted: {file_path}")
+        gc.collect()
 
     def list_files(self, extensions=None):
         """

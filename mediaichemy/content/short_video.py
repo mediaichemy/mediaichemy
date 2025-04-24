@@ -78,7 +78,7 @@ class ShortVideo(Content):
 
 class ShortVideoCreator(ContentCreator):
     def __init__(self):
-        self.configs = ConfigManager().get('content.shortvideo')
+        self.configs = ConfigManager().get('content.short_video')
 
         self.prompt = ShortVideoPrompt(
             n_ideas=self.configs['n_ideas'],
@@ -95,11 +95,12 @@ class ShortVideoCreator(ContentCreator):
         return ideas
 
     async def create(self, content: ShortVideo) -> None:
+        config_manager = ConfigManager()
         image = await self.run_image_creation(content)
         video = await self.run_video_creation(content, image,
-                                              creation_method=self.configs['creation_method'])
+                                              creation_method=config_manager.get('video.creation_method'))
         speech = await self.run_speech_creation(content)
         edited_videos = await self.run_video_editing(content, video, speech,
-                                                     extension_method=self.configs['extension_method'])
+                                                     extension_method=config_manager.get('video.extension_method'))
         subtitled_videos = await self.run_subtitling(content, edited_videos)
         return subtitled_videos

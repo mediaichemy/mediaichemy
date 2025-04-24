@@ -1,3 +1,4 @@
+import ast
 import json
 from io import StringIO
 import logging
@@ -108,6 +109,7 @@ def RawJSONDecoder(index):
 def extract_json(s, index=0):
     """
     Extracts JSON objects from a string starting at a given index.
+    Tries to handle Python string representation if JSON parsing fails.
 
     :param s: str
         The string to extract JSON from.
@@ -116,6 +118,12 @@ def extract_json(s, index=0):
     :return: Generator[dict]
         A generator yielding JSON objects.
     """
+    try:
+        yield ast.literal_eval(s)
+        return
+    except (SyntaxError, ValueError):
+        pass
+
     while (index := s.find('{', index)) != -1:
         try:
             yield json.loads(s, cls=(decoder := RawJSONDecoder(index)))

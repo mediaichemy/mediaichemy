@@ -24,11 +24,36 @@ def set_env_variables():
 
 
 @pytest.fixture(scope="function")
-def copy_mock_content():
+def copy_mock_short_video():
     """
     Copy all content from 'tests/resources/mocks/short_video' to 'tests/resources/temp_content'.
     """
     source_dir = 'tests/resources/mocks/short_video'
+    target_dir = 'tests/resources/temp_content'
+
+    # Remove the target directory if it already exists to ensure a clean copy
+    if os.path.exists(target_dir):
+        shutil.rmtree(target_dir)
+
+    # Copy the source directory to the target directory
+    shutil.copytree(source_dir, target_dir)
+    print(f"Copied content from {source_dir} to {target_dir}")
+
+    # Yield to allow tests to run
+    yield
+
+    # Cleanup after tests are done
+    if os.path.exists(target_dir):
+        shutil.rmtree(target_dir)
+        print(f"Cleaned up temporary content directory: {target_dir}")
+
+
+@pytest.fixture(scope="function")
+def copy_mock_music_video():
+    """
+    Copy all content from 'tests/resources/mocks/music_video' to 'tests/resources/temp_content'.
+    """
+    source_dir = 'tests/resources/mocks/music_video'
     target_dir = 'tests/resources/temp_content'
 
     # Remove the target directory if it already exists to ensure a clean copy

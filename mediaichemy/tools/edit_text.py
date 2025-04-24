@@ -5,6 +5,8 @@ import logging
 from mediaichemy.tools.filehandling import MP4File
 from mediaichemy.configs import ConfigManager
 import pysubs2
+from youtube_transcript_api import YouTubeTranscriptApi
+
 
 logger = logging.getLogger(__name__)
 
@@ -122,6 +124,7 @@ class Subtitles:
                 # Use ffmpeg to add subtitles to the video
                 command = [
                     "ffmpeg",
+                    "-y",
                     "-i", self.video.filepath,  # Input video
                     "-vf", f"subtitles={subtitle_path}",  # Add subtitles
                     "-c:a", "copy",  # Copy the audio stream without re-encoding
@@ -254,3 +257,48 @@ class Subtitles:
             logger.info(f"Subtitle file created at: {sub_filepath}")
             sub_paths.append(sub_filepath)
         return sub_paths
+
+
+class YoutubeCaption:
+    def __init__(self, url):
+        self.ytt_api = YouTubeTranscriptApi()
+        self.video_id = url.split("v=")[-1]
+
+    def check_available_transcripts(self, print_transcripts=False):
+        transcript_list = self.ytt_api.list(self.video_id)
+        auto_generated_transcripts = [transcript.language_code
+                                      for transcript in transcript_list if transcript.is_generated]
+        user_generated_transcripts = [transcript.language_code
+                                      for transcript in transcript_list if not transcript.is_generated]
+        transcripts = {'auto_generated': auto_generated_transcripts, 'user_generated': user_generated_transcripts}
+        if print_transcripts:
+            print(transcripts)
+        return transcripts
+
+    def get_transcript(self, language='en'):
+        transcript = self.ytt_api.fetch(self.video_id,
+                                        languages=[language])
+        return transcript
+
+    def _get_subtitles_from_transcript(self, transcript):
+        subtitles = []
+        for snippet in transcript.snippets:
+            subtitle = {}
+            subtitle['end'] = snippet.start + snippet.duration
+            subtitle['start'] = snippet.start
+            subtitle['text'] = snippet.text
+            subtitles.append(subtitle)
+        return subtitles
+
+    def get_subtitles(self, language: str = None):
+        transcripts = self.check_available_transcripts()
+        user_generated = transcripts.get('user_generated', None)
+        if user_generated:
+            language = user_generated[0]
+        if not user_generated:
+            logger.warning("No user-generated transcripts available."
+                           "Using auto-generated transcripts instead.")
+            language = transcripts.get('auto_generated', None)[0]
+        transcript = self.get_transcript(language=language)
+        subtitles = self._get_subtitles_from_transcript(transcript)
+        return subtitles

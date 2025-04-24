@@ -2,6 +2,10 @@ import ipywidgets as widgets
 from IPython.display import display
 from typing import List, Dict
 import logging
+import matplotlib.font_manager as fm
+import matplotlib.pyplot as plt
+import numpy as np
+import random
 
 # Initialize logger
 logger = logging.getLogger(__name__)
@@ -23,9 +27,16 @@ def display_ideas(ideas: List[Dict]) -> List[Dict[str, widgets.Checkbox]]:
     for i, idea in enumerate(ideas):
         details_html = ""
         for key, value in idea.items():
-            if isinstance(value, dict):
+            if key == "section" and isinstance(value, list):
+                # Special handling for section array with timing data
+                sections_html = "<br>".join([
+                    f"[{s.get('start', 'N/A')}-{s.get('end', 'N/A')}] {s.get('text', '')}" 
+                    for s in value
+                ])
+                value = sections_html
+            elif isinstance(value, dict):
                 value = "<br>".join(f"{k}: {v}" for k, v in value.items())
-            elif isinstance(value, list):
+            elif isinstance(value, list) and value and not isinstance(value[0], dict):
                 value = ", ".join(map(str, value))
             else:
                 value = str(value)
@@ -121,7 +132,7 @@ def select_ideas(
     Args:
         ideas (List[Dict]): The list of ideas to filter.
         selection_widgets (List[Dict[str, widgets.Checkbox]]):
-        ist of dictionaries containing the main checkbox and language checkboxes.
+        List of dictionaries containing the main checkbox and language checkboxes.
 
     Returns:
         List[Dict]: A list of selected ideas with filtered languages.
@@ -130,27 +141,99 @@ def select_ideas(
 
     for idea, widgets_dict in zip(ideas, selection_widgets):
         if widgets_dict["main_checkbox"].value:
-            selected_languages = [
-                lang for lang,
-                checkbox in widgets_dict["language_checkboxes"].items()
-                if checkbox.value
-            ]
-
-            filtered_idea = idea.copy()
-            for key, value in filtered_idea.items():
-                if isinstance(value, dict):
-                    filtered_idea[key] = {
-                        lang: text for lang, text in value.items()
-                        if lang in selected_languages
-                    }
-
-            if "languages" in filtered_idea and isinstance(
-                    filtered_idea["languages"], list):
-                filtered_idea["languages"] = [
-                    lang for lang in filtered_idea["languages"]
-                    if lang in selected_languages
+            # Check if this idea has language checkboxes
+            if widgets_dict["language_checkboxes"]:
+                selected_languages = [
+                    lang for lang,
+                    checkbox in widgets_dict["language_checkboxes"].items()
+                    if checkbox.value
                 ]
 
-            selected_ideas.append(filtered_idea)
+                # If no languages are selected but the main checkbox is, 
+                # include all available languages
+                if not selected_languages and "languages" in idea:
+                    selected_languages = idea["languages"]
+
+                filtered_idea = idea.copy()
+                for key, value in filtered_idea.items():
+                    if isinstance(value, dict):
+                        filtered_idea[key] = {
+                            lang: text for lang, text in value.items()
+                            if lang in selected_languages
+                        }
+
+                if "languages" in filtered_idea and isinstance(
+                        filtered_idea["languages"], list):
+                    filtered_idea["languages"] = [
+                        lang for lang in filtered_idea["languages"]
+                        if lang in selected_languages
+                    ]
+
+                selected_ideas.append(filtered_idea)
+            else:
+                # For ideas without language checkboxes, just include the entire idea
+                selected_ideas.append(idea.copy())
 
     return selected_ideas
+
+
+def show_font_samples(sample_text="AaBbCcDd 123 !?", num_fonts=None, font_size=16):
+    """
+    Displays visual samples of available fonts with their names.
+
+    Parameters:
+    -----------
+    sample_text : str
+        Text to display in each font sample
+    num_fonts : int
+        Number of fonts to display (set to None to show all fonts)
+    font_size : int
+        Size of the font in the sample
+    """
+
+    # Get all font files on the system
+    font_files = fm.findSystemFonts()
+    font_props = []
+
+    # Extract font properties
+    for font_file in font_files:
+        try:
+            font = fm.FontProperties(fname=font_file)
+            name = font.get_name()
+            if name:  # Some fonts might not have names
+                font_props.append((name, font))
+        except Exception:
+            continue
+
+    # Sort by name and limit to num_fonts if specified
+    font_props = sorted(font_props, key=lambda x: x[0])
+    if num_fonts is not None and num_fonts < len(font_props):
+        # Get a random sample if there are too many
+        font_props = random.sample(font_props, num_fonts)
+
+    # Set up the plot
+    n_fonts = len(font_props)
+    cols = 2
+    rows = int(np.ceil(n_fonts / cols))
+
+    fig, axs = plt.subplots(rows, cols, figsize=(14, rows * 1.5))
+    fig.suptitle("Font Samples", fontsize=16)
+    axs = axs.flatten()
+
+    # Display each font
+    for i, (name, font) in enumerate(font_props):
+        if i < len(axs):
+            ax = axs[i]
+            ax.text(0.5, 0.5, sample_text, fontproperties=font, fontsize=font_size,
+                    ha='center', va='center')
+            ax.set_title(name, fontsize=10)
+            ax.axis('off')
+
+    # Hide unused subplots
+    for i in range(n_fonts, len(axs)):
+        axs[i].axis('off')
+
+    plt.tight_layout(rect=[0, 0, 1, 0.97])  # Adjust layout to make room for suptitle
+    plt.show()
+
+    return [name for name, _ in font_props]
